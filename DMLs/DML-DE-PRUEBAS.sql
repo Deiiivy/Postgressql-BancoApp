@@ -11,7 +11,7 @@ VALUES
 --insert con error, para demostracion de validacion de ciudad
 INSERT INTO cliente (apellido1, apellido2, nombres, documento, idtipodocumento, fechanacimiento, idciudadnacimiento, direccion, movil, correo)
 VALUES 
-('sanchez', 'Rodriguez', 'sara', '123456782', 2, '2000-05-15', 1, ROW('Cra 50 #10-20', 1), '3007654312', 'sara.sanchez@gmail.com');
+('sanchez', 'Rodriguez', 'sara', '123456782', 2, '2000-05-15', 1, ROW('Cra 50 #10-20', 9999), '3007654312', 'sara.sanchez@gmail.com');
 
 --insert correcto
 INSERT INTO cliente (apellido1, apellido2, nombres, documento, idtipodocumento, fechanacimiento, idciudadnacimiento, direccion, movil, correo)
