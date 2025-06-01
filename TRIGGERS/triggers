@@ -1,0 +1,82 @@
+--validar ciudad en direccion 
+CREATE OR REPLACE FUNCTION fvalidarciudaddireccion()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM ciudad WHERE id = (NEW.direccion).idciudad ) THEN
+		RAISE EXCEPTION 'La ciudad con id=% no existe en direccion', (NEW.direccion).idciudad;
+	END IF;
+	RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tvalidarciudaddireccion
+BEFORE INSERT OR UPDATE ON cliente
+	FOR EACH ROW
+	EXECUTE FUNCTION fvalidarciudaddireccion();
+
+
+-- Validar numero de cuenta único en cuentaAhorro
+CREATE OR REPLACE FUNCTION f_validar_numero_cuenta_ahorro()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF EXISTS (
+		SELECT 1 FROM cuentaAhorro 
+		WHERE (ahorros).numero = (NEW.ahorros).numero
+	) THEN
+		RAISE EXCEPTION 'El número de cuenta de ahorro % ya existe', (NEW.ahorros).numero;
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER t_validar_numero_cuenta_ahorro
+BEFORE INSERT OR UPDATE ON cuentaAhorro
+FOR EACH ROW
+EXECUTE FUNCTION f_validar_numero_cuenta_ahorro();
+
+
+-- validar numero de cuenta único en cuentaCorriente
+CREATE OR REPLACE FUNCTION f_validar_numero_cuenta_corriente()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF EXISTS (
+		SELECT 1 FROM cuentaCorriente 
+		WHERE (corriente).numero = (NEW.corriente).numero
+	) THEN
+		RAISE EXCEPTION 'El número de cuenta corriente % ya existe', (NEW.corriente).numero;
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER t_validar_numero_cuenta_corriente
+BEFORE INSERT OR UPDATE ON cuentaCorriente
+FOR EACH ROW
+EXECUTE FUNCTION f_validar_numero_cuenta_corriente();
+
+
+
+-- Validar número de cuenta único en crédito
+CREATE OR REPLACE FUNCTION f_validar_numero_credito()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF EXISTS (
+		SELECT 1 FROM credito 
+		WHERE (credito).numero = (NEW.credito).numero
+	) THEN
+		RAISE EXCEPTION 'El número de crédito % ya existe', (NEW.credito).numero;
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+CREATE TRIGGER t_validar_numero_credito
+BEFORE INSERT OR UPDATE ON credito
+FOR EACH ROW
+EXECUTE FUNCTION f_validar_numero_credito();
+
+
+
